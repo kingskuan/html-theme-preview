@@ -5,397 +5,423 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HTML Theme Preview</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: #0d1117; color: #e6e6e6;
-    height: 100vh; display: flex; flex-direction: column;
-    overflow: hidden;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    background:#0d1117;color:#e6e6e6;
+    display:flex;flex-direction:column;
   }
 
-  /* ── Header ── */
-  header {
-    display: flex; align-items: center; gap: 16px; padding: 12px 20px;
-    background: #161b22; border-bottom: 1px solid #30363d; flex-shrink: 0;
+  /* ─ header ─ */
+  .header{
+    display:flex;align-items:center;gap:12px;padding:8px 16px;
+    background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;min-height:44px;
   }
-  header h1 { font-size: 16px; font-weight: 600; color: #f0f6fc; }
-  #file-info { margin-left: auto; font-size: 13px; color: #8b949e; }
+  .header h1{font-size:14px;font-weight:600;color:#f0f6fc;white-space:nowrap}
+  .file-name{margin-left:auto;font-size:12px;color:#8b949e;max-width:40ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-  /* ── Controls ── */
-  #controls {
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    padding: 10px 20px; background: #161b22; border-bottom: 1px solid #30363d; flex-shrink: 0;
+  /* ─ theme bar ─ */
+  .theme-bar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:8px 16px;background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;
   }
-  .ctrl-group { display: flex; align-items: center; gap: 8px; }
-  .ctrl-group label { font-size: 13px; color: #8b949e; text-transform: uppercase; letter-spacing: .05em; }
+  .theme-bar label{font-size:12px;color:#8b949e;text-transform:uppercase;letter-spacing:.05em}
 
-  /* Buttons */
-  button, label.file-btn {
-    padding: 6px 14px; border: 1px solid #30363d; border-radius: 6px;
-    background: #21262d; color: #e6e6e6; font-size: 13px; cursor: pointer;
-    transition: background .15s, border-color .15s; white-space: nowrap;
+  /* theme cards */
+  .theme-grid{display:flex;gap:6px;flex-wrap:wrap}
+
+  .theme-card{
+    display:flex;align-items:center;gap:5px;
+    padding:4px 10px;border:1px solid #30363d;border-radius:20px;
+    background:#21262d;color:#8b949e;font-size:12px;cursor:pointer;
+    transition:all .15s;
   }
-  button:hover, label.file-btn:hover { background: #30363d; border-color: #484f58; }
-  button.active { border-color: #58a6ff; background: #1f3a5f; color: #79c0ff; }
-  .download-btn { background: #238636; border-color: #2ea043; color: #fff; }
-  .download-btn:hover { background: #2ea043; }
+  .theme-card:hover{border-color:#484f58;color:#e6e6e6}
+  .theme-card.active{border-color:#58a6ff;background:#1f3a5f;color:#79c0ff}
 
-  /* Select */
-  select {
-    padding: 6px 10px; background: #21262d; border: 1px solid #30363d;
-    border-radius: 6px; color: #e6e6e6; font-size: 13px; cursor: pointer; outline: none;
+  .theme-swatch{
+    width:14px;height:14px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,255,255,.15)
   }
 
-  /* ── Iframe ── */
-  #preview-wrapper {
-    flex: 1; position: relative; overflow: hidden; background: #fff;
+  /* download button */
+  .download-btn{
+    margin-left:auto;padding:4px 14px;border:1px solid #238636;
+    border-radius:20px;background:#238636;color:#fff;font-size:12px;cursor:pointer;
+    transition:all .15s;
   }
-  #preview {
-    width: 100%; height: 100%; border: none;
-    background: #fff;
-  }
+  .download-btn:hover{background:#2ea043}
+  .download-btn:disabled{opacity:.4;cursor:default;background:#1a3a20}
 
-  /* ── Empty state ── */
-  #empty {
-    position: absolute; inset: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 12px;
-    background: #161b22; color: #8b949e; cursor: pointer;
-  }
-  #empty.hidden { display: none; }
-  #empty .icon { font-size: 48px; }
-  #empty p { font-size: 15px; }
+  /* ─ upload zone / preview ─ */
+  .main{flex:1;position:relative;overflow:hidden}
 
-  /* ── Drop overlay ── */
-  #drop-overlay {
-    position: absolute; inset: 0; background: rgba(88,166,255,.08);
-    border: 2px dashed #58a6ff; display: none;
-    align-items: center; justify-content: center; font-size: 18px;
-    color: #58a6ff; pointer-events: none; z-index: 10;
+  /* upload dropzone */
+  .upload-zone{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:16px;
+    cursor:pointer;z-index:2;
   }
-  #drop-overlay.visible { display: flex; }
+  .upload-zone.hidden{display:none}
+  .upload-icon{font-size:56px;opacity:.5}
+  .upload-text{font-size:16px;color:#8b949e}
+  .upload-hint{font-size:12px;color:#484f58}
+  #file-input{display:none}
+
+  /* drop overlay */
+  .drop-active{
+    position:absolute;inset:0;background:rgba(88,166,255,.06);
+    border:2px dashed #58a6ff;display:none;align-items:center;
+    justify-content:center;font-size:18px;color:#58a6ff;
+    z-index:10;pointer-events:none;
+  }
+  .drop-active.visible{display:flex}
+
+  /* canvas (rendered result) */
+  #canvas-wrap{position:absolute;inset:0;overflow:auto}
+  #canvas{display:none;min-height:100%;width:100%}
+  #canvas.show{display:block}
+
+  /* compare view */
+  #compare-wrap{position:absolute;inset:0;overflow:hidden;display:none}
+  #compare-wrap.show{display:flex}
+  .compare-pane{flex:1;overflow:auto;position:relative}
+  .compare-pane:nth-child(2){border-left:2px solid #58a6ff}
+  .compare-label{
+    position:sticky;top:0;z-index:5;padding:4px 12px;
+    background:rgba(88,166,255,.85);color:#000;font-size:11px;font-weight:700;
+    text-align:center;backdrop-filter:blur(4px);
+  }
+  .compare-pane .raw-preview{padding:20px}
+
+  /* toast */
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
+    padding:8px 20px;border-radius:8px;background:#238636;color:#fff;font-size:13px;
+    transition:transform .3s;z-index:100;opacity:0;pointer-events:none;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
 
-<header>
+<div class="header">
   <h1>🌐 HTML Theme Preview</h1>
-  <span id="file-info">尚未上传文件</span>
-</header>
-
-<div id="controls">
-  <div class="ctrl-group">
-    <label>文件</label>
-    <label class="file-btn" for="file-input">📁 选择 HTML</label>
-    <input type="file" id="file-input" accept=".html,.htm" hidden>
-    <button id="reload-btn">🔄 重新上传</button>
-  </div>
-
-  <span style="color:#30363d">|</span>
-
-  <div class="ctrl-group">
-    <label>主题</label>
-    <select id="theme-select" disabled>
-      <option value="none">— 选择主题 —</option>
-      <option value="original">原始样式</option>
-      <option value="minimal">✨ 极简 White</option>
-      <option value="dark">🌙 深色 Dark</option>
-      <option value="warm">🔥 暖色 Warm</option>
-      <option value="ocean">🌊 海洋 Ocean</option>
-      <option value="retro">📟 复古终端 Retro</option>
-      <option value="neon">💜 霓虹 Neon</option>
-      <option value="sage">🌿 鼠尾草 Sage</option>
-    </select>
-  </div>
-
-  <div class="ctrl-group">
-    <label>操作</label>
-    <button id="apply-btn" disabled>🎨 应用主题</button>
-    <button id="download-btn" class="download-btn" disabled>⬇ 下载结果</button>
-  </div>
+  <span class="file-name" id="fileName">尚未上传</span>
 </div>
 
-<div id="preview-wrapper">
-  <div id="drop-overlay">松开鼠标以上传</div>
-  <div id="empty">
-    <div class="icon">📄</div>
-    <p>点击「选择 HTML」或把文件拖到此处</p>
+<div class="theme-bar">
+  <label>主题</label>
+  <div class="theme-grid" id="themeGrid">
+    <!-- JS fills this -->
   </div>
-  <iframe id="preview"></iframe>
+  <button class="download-btn" id="dlBtn" disabled>⬇ 下载结果 HTML</button>
 </div>
+
+<div class="main" id="mainArea">
+  <!-- Upload zone -->
+  <div class="upload-zone" id="uploadZone">
+    <div class="upload-icon">📄</div>
+    <div class="upload-text">点击此处或将 HTML 文件拖到此处</div>
+    <div class="upload-hint">支持 .html / .htm</div>
+  </div>
+  <div class="drop-active" id="dropActive">松开鼠标以上传</div>
+
+  <!-- Rendered result (theme-applied) -->
+  <div id="canvas-wrap"><iframe id="canvas" sandbox="allow-scripts"></iframe></div>
+</div>
+
+<input type="file" id="fileInput" accept=".html,.htm">
+<div class="toast" id="toast"></div>
 
 <script>
-const fileInput   = document.getElementById('file-input');
-const reloadBtn   = document.getElementById('reload-btn');
-const emptyState  = document.getElementById('empty');
-const preview     = document.getElementById('preview');
-const fileInfo    = document.getElementById('file-info');
-const themeSelect = document.getElementById('theme-select');
-const applyBtn    = document.getElementById('apply-btn');
-const downloadBtn = document.getElementById('download-btn');
-const dropOverlay = document.getElementById('drop-overlay');
+/* ============================================================
+   Theme definitions — single CSS string each
+   ============================================================ */
+const THEMES = {
+
+  /* ── Minimal ── */
+  minimal: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:18px;scroll-behavior:smooth}
+body{max-width:680px;margin:0 auto;padding:64px 24px;background:#fafafa;color:#111;line-height:1.75;font-family:Georgia,'Times',serif}
+h1,h2,h3,h4{font-family:-apple-system,system-ui,sans-serif;line-height:1.3;margin:1.5em 0 .4em}
+h1{font-size:2.2em;border-bottom:2px solid #e0e0e0;padding-bottom:.3em}
+h2{font-size:1.7em}
+p{margin:.8em 0}
+a{color:#0055aa;text-decoration:underline}
+code{background:#eee;padding:2px 6px;border-radius:4px;font-size:.9em;font-family:monospace}
+pre{background:#f0f0f0;padding:16px;border-radius:6px;overflow-x:auto}
+pre code{background:none;padding:0}
+blockquote{border-left:4px solid #ccc;margin:1em 0;padding:.4em 16px;color:#555}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #ddd;padding:8px 12px;text-align:left}
+th{background:#f5f5f5}
+img{max-width:100%;height:auto;border-radius:4px}
+hr{border:none;border-top:1px solid #e0e0e0;margin:2em 0}`,
+
+  /* ── Dark — GitHub Dark ── */
+  dark: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+html{background:#0d1117}
+body{background:#0d1117;color:#e6e6e6;max-width:880px;margin:0 auto;padding:40px 24px;line-height:1.7;font-size:16px}
+h1,h2,h3,h4{color:#f0f6fc;font-weight:700;margin:1.4em 0 .4em}
+h1{font-size:2.2em;border-bottom:1px solid #30363d;padding-bottom:.3em}
+h2{font-size:1.7em}
+p{margin:.8em 0}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#161b22;border:1px solid #30363d;padding:2px 7px;border-radius:5px;font-size:.9em;color:#ffa657}
+pre{background:#161b22;border:1px solid #30363d;padding:16px 20px;border-radius:8px;overflow-x:auto}
+pre code{background:none;border:none;padding:0;color:#e6e6e6}
+blockquote{border-left:4px solid #30363d;margin:1em 0;padding:.5em 16px;color:#8b949e}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #30363d;padding:10px 14px}
+th{background:#161b22;color:#f0f6fc}
+img{max-width:100%;border-radius:6px}
+hr{border:none;border-top:1px solid #30363d;margin:2em 0}
+input,textarea,select,button{background:#21262d;border:1px solid #30363d;color:#e6e6e6;border-radius:6px;padding:8px 12px;outline:none}
+button{background:#238636;border-color:#2ea043;color:#fff;cursor:pointer}`,
+
+  /* ── Warm ── */
+  warm: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+html{background:#faf6f1}
+body{background:#faf6f1;color:#2c1810;max-width:760px;margin:0 auto;padding:56px 28px;line-height:1.8;font-size:17px;font-family:Georgia,serif}
+h1,h2,h3,h4{color:#1a0e08;font-weight:800;margin:1.4em 0 .4em}
+h1{font-size:2.4em;border-bottom:3px solid #e8d5c0;padding-bottom:.3em}
+h2{font-size:1.8em}
+p{margin:.8em 0}
+a{color:#b45309;text-decoration:none;border-bottom:1px solid #e8d5c0}
+a:hover{border-bottom-color:#b45309}
+code{background:#f3e8dc;padding:2px 7px;border-radius:4px;font-size:.9em;color:#92400e}
+pre{background:#f3e8dc;padding:18px;border-radius:8px;overflow-x:auto;border:1px solid #e8d5c0}
+pre code{background:none;padding:0;color:#2c1810}
+blockquote{border-left:4px solid #d97706;margin:1em 0;padding:.5em 18px;color:#78350f;background:#fffbeb;border-radius:0 6px 6px 0}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #e8d5c0;padding:10px 14px}
+th{background:#fef3c7}
+img{max-width:100%;border-radius:8px}
+hr{border:none;border-top:2px solid #e8d5c0;margin:2em 0}`,
+
+  /* ── Ocean ── */
+  ocean: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+body{background:#f0f7f4;color:#0f3d3e;max-width:800px;margin:0 auto;padding:52px 28px;line-height:1.75;font-size:16px;font-family:'Inter',system-ui,sans-serif}
+h1,h2,h3,h4{color:#0a2e2f;font-weight:700;margin:1.3em 0 .4em}
+h1{font-size:2.3em;border-bottom:3px solid #99d5cf;padding-bottom:.25em}
+h2{font-size:1.7em}
+p{margin:.8em 0}
+a{color:#0e7490;text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#d1fae5;padding:2px 7px;border-radius:4px;font-size:.9em;color:#065f46}
+pre{background:#e0f2f1;padding:18px;border-radius:10px;overflow-x:auto;border:1px solid #99d5cf}
+pre code{background:none;padding:0;color:#0f3d3e}
+blockquote{border-left:4px solid #14b8a6;margin:1em 0;padding:.5em 18px;color:#134e4a;background:#ccfbf1;border-radius:0 8px 8px 0}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #99d5cf;padding:10px 14px}
+th{background:#e0f2f1}
+img{max-width:100%;border-radius:8px}
+hr{border:none;border-top:1px solid #99d5cf;margin:2em 0}`,
+
+  /* ── Retro Terminal ── */
+  retro: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+html{background:#080808;color:#00ff41;font-family:'Courier New',Consolas,monospace}
+body{padding:32px 20px;line-height:1.6;font-size:15px;max-width:75ch;margin:0 auto}
+h1,h2,h3,h4{text-transform:uppercase;margin:1.2em 0 .3em}
+h1{font-size:1.8em;border-bottom:1px solid #00ff41;padding-bottom:4px}
+h2{font-size:1.4em}
+a{color:#00ff41;text-decoration:underline}
+code,pre{color:#00ff41;font-family:'Courier New',Consolas,monospace}
+code{background:#111;padding:2px 6px}
+pre{background:#0a0a0a;padding:16px;border:1px solid #00ff41;overflow-x:auto}
+blockquote{border-left:3px solid #00ff41;margin:1em 0;padding:.5em 16px;color:#0c0}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #00ff41;padding:8px 12px}
+hr{border:none;border-top:1px solid #00ff41;margin:2em 0}
+input,textarea,select,button{background:#111;border:1px solid #00ff41;color:#00ff41;font-family:inherit;padding:6px 10px}`,
+
+  /* ── Neon ── */
+  neon: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+html{background:#0a001a}
+body{background:#0a001a;color:#f5e6ff;max-width:820px;margin:0 auto;padding:52px 28px;line-height:1.7;font-size:17px}
+h1,h2,h3,h4{color:#fff;font-weight:800;margin:1.3em 0 .4em;font-style:italic}
+h1{font-size:2.5em;border-bottom:2px solid #c084fc}
+h2{font-size:1.8em}
+p{margin:.8em 0}
+a{color:#f0abfc;text-decoration:none}
+a:hover{color:#fff;text-shadow:0 0 12px #f0abfc}
+code{background:rgba(192,132,252,.15);padding:3px 8px;border-radius:5px;color:#e879f9;border:1px solid rgba(192,132,252,.3)}
+pre{background:rgba(88,28,135,.3);padding:18px;border-radius:12px;overflow-x:auto;border:1px solid rgba(192,132,252,.25)}
+pre code{background:none;border:none;color:#f5e6ff}
+blockquote{border-left:4px solid #c084fc;margin:1em 0;padding:.5em 18px;color:#d8b4fe;background:rgba(88,28,135,.15);border-radius:0 8px 8px 0}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid rgba(192,132,252,.3);padding:10px 14px}
+th{background:rgba(192,132,252,.1);color:#fff}
+img{max-width:100%;border-radius:10px}
+hr{border:none;border-top:1px solid rgba(192,132,252,.3);margin:2em 0}
+input,textarea,select,button{background:rgba(88,28,135,.25);border:1px solid rgba(192,132,252,.4);color:#f5e6ff;border-radius:8px;padding:8px 12px;outline:none}
+button{background:rgba(192,132,252,.25);color:#fff;cursor:pointer}`,
+
+  /* ── Sage ── */
+  sage: ()=>`
+*,*::before,*::after{box-sizing:border-box}
+body{background:#f5f5f0;color:#2d3a2e;max-width:760px;margin:0 auto;padding:56px 28px;line-height:1.75;font-size:17px}
+h1,h2,h3,h4{color:#1e3a1f;font-weight:700;margin:1.3em 0 .4em}
+h1{font-size:2.2em;border-bottom:2px solid #c8d6c0;padding-bottom:.3em}
+h2{font-size:1.6em}
+p{margin:.8em 0}
+a{color:#3b7a1e;text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#e8ede5;padding:2px 7px;border-radius:4px;font-size:.9em;color:#2d5a1e}
+pre{background:#e8ede5;padding:18px;border-radius:8px;overflow-x:auto;border:1px solid #c8d6c0}
+pre code{background:none;padding:0}
+blockquote{border-left:4px solid #7aa96e;margin:1em 0;padding:.5em 18px;color:#3f5e35;background:#f0f5ed;border-radius:0 8px 8px 0}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+td,th{border:1px solid #c8d6c0;padding:10px 14px}
+th{background:#e8ede5}
+img{max-width:100%;border-radius:8px}
+hr{border:none;border-top:1px solid #c8d6c0;margin:2em 0}
+input,textarea,select,button{background:#fff;border:1px solid #c8d6c0;color:#2d3a2e;border-radius:6px;padding:8px 12px}`,
+};
+
+/* Swatch colors for each theme */
+const SWATCHES = {
+  minimal:'#e8d4b8', dark:'#161b22', warm:'#f5c87a',
+  ocean:'#99d5cf', retro:'#0f0', neon:'#c084fc', sage:'#7aa96e',
+};
+
+const THEME_LABELS = {
+  minimal:'极简', dark:'深色', warm:'暖色',
+  ocean:'海洋', retro:'终端', neon:'霓虹', sage:'鼠尾草',
+};
+
+/* ============================================================
+   DOM
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const fileInput    = $('fileInput');
+const fileName     = $('fileName');
+const uploadZone   = $('uploadZone');
+const dropActive   = $('dropActive');
+const themeGrid    = $('themeGrid');
+const canvas       = $('canvas');
+const canvasWrap   = $('canvas-wrap');
+const dlBtn        = $('dlBtn');
+const toast        = $('toast');
 
 let originalHTML = '';
-let themedHTML   = '';
+let currentTheme = null;
 
-// ─── File handling ────────────────────────────────────
-function loadFile(file) {
-  if (!file) return;
-  fileInfo.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+/* ── Build theme buttons ── */
+window.buildThemeButtons = function(){
+  themeGrid.innerHTML = '';
+  const keys = Object.keys(THEMES);
+  keys.forEach(k => {
+    const card = document.createElement('div');
+    card.className = 'theme-card' + (currentTheme === k ? ' active' : '');
+    card.dataset.theme = k;
+    const swatch = document.createElement('div');
+    swatch.className = 'theme-swatch';
+    swatch.style.background = SWATCHES[k];
+    card.appendChild(swatch);
+    card.appendChild(document.createTextNode(THEME_LABELS[k]));
+    card.addEventListener('click', () => applyTheme(k));
+    themeGrid.appendChild(card);
+  });
+};
+
+/* ── File ── */
+function handleFile(file){
+  if(!file) return;
+  fileName.textContent = file.name;
   const reader = new FileReader();
   reader.onload = e => {
     originalHTML = e.target.result;
-    // Reset
-    themeSelect.value = 'none';
-    applyBtn.disabled = downloadBtn.disabled = true;
-    showPreview(originalHTML);
+    uploadZone.classList.add('hidden');
+    // Reset theme selection
+    currentTheme = null;
+    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+    // Clear canvas
+    canvas.classList.remove('show');
+    dlBtn.disabled = true;
   };
   reader.readAsText(file);
 }
 
-function showPreview(html) {
-  if (!html.trim()) return;
-  emptyState.classList.add('hidden');
-  preview.srcdoc = html;
+fileInput.addEventListener('change', e => { handleFile(e.target.files[0]); });
+
+/* ── Drag & drop ── */
+uploadZone.addEventListener('click', () => fileInput.click());
+const main = $('mainArea');
+main.addEventListener('dragover',  e => { e.preventDefault(); dropActive.classList.add('visible'); });
+main.addEventListener('dragleave', e => { if(!main.contains(e.relatedTarget)) dropActive.classList.remove('visible'); });
+main.addEventListener('drop',       e => { e.preventDefault(); dropActive.classList.remove('visible'); handleFile(e.dataTransfer.files[0]); });
+
+/* ── Apply theme ── */
+function applyTheme(key){
+  if(!originalHTML){ toastMsg('先上传 HTML 文件'); return; }
+  currentTheme = key;
+
+  // highlight active card
+  document.querySelectorAll('.theme-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.theme === key);
+  });
+
+  const css = THEMES[key]();
+  const fullHTML = injectCSS(originalHTML, css);
+  renderInCanvas(fullHTML);
+  dlBtn.disabled = false;
+  toastMsg(`已应用「${THEME_LABELS[key]}」主题`);
 }
 
-fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
-reloadBtn.addEventListener('click', () => fileInput.click());
-
-// ─── Drag & drop ──────────────────────────────────────
-const wrapper = document.getElementById('preview-wrapper');
-wrapper.addEventListener('dragover', e => { e.preventDefault(); dropOverlay.classList.add('visible'); });
-wrapper.addEventListener('dragleave', e => { if (!wrapper.contains(e.relatedTarget)) dropOverlay.classList.remove('visible'); });
-wrapper.addEventListener('drop', e => {
-  e.preventDefault();
-  dropOverlay.classList.remove('visible');
-  loadFile(e.dataTransfer.files[0]);
-});
-
-// ─── Themes ───────────────────────────────────────────
-const THEMES = {
-  none: '',
-
-  minimal: `
-html { font-family: Georgia, 'Times New Roman', serif; }
-body { max-width: 680px; margin: 0 auto; padding: 60px 24px; background: #fafafa; color: #1a1a1a; line-height: 1.75; font-size: 17px; }
-h1,h2,h3,h4,h5,h6 { font-family: -apple-system, sans-serif; font-weight: 700; line-height: 1.3; margin: 1.5em 0 .5em; }
-h1 { font-size: 2.2em; border-bottom: 2px solid #e0e0e0; padding-bottom: .3em; }
-h2 { font-size: 1.7em; }
-p { margin: .8em 0; }
-a { color: #0055aa; text-decoration: underline; }
-a:hover { color: #003380; }
-code { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: .9em; }
-pre { background: #f0f0f0; padding: 16px; border-radius: 6px; overflow-x: auto; }
-pre code { background: none; padding: 0; }
-blockquote { border-left: 4px solid #ccc; margin: 1em 0; padding: .5em 16px; color: #555; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
-th { background: #f5f5f5; font-weight: 600; }
-img { max-width: 100%; height: auto; }
-hr { border: none; border-top: 1px solid #e0e0e0; margin: 2em 0; }
-input, textarea, select, button { font-family: inherit; font-size: 16px; }
-`,
-
-  dark: `
-html { background: #0d1117; }
-body { background: #0d1117; color: #e6e6e6; max-width: 900px; margin: 0 auto; padding: 40px 24px; line-height: 1.7; }
-h1,h2,h3,h4,h5,h6 { color: #f0f6fc; font-weight: 700; margin: 1.4em 0 .4em; }
-h1 { font-size: 2.2em; border-bottom: 1px solid #30363d; padding-bottom: .3em; }
-h2 { font-size: 1.7em; }
-p { margin: .8em 0; color: #c9d1d9; }
-a { color: #58a6ff; text-decoration: none; }
-a:hover { text-decoration: underline; }
-code { background: #161b22; border: 1px solid #30363d; padding: 2px 7px; border-radius: 5px; font-size: .9em; color: #ffa657; }
-pre { background: #161b22; border: 1px solid #30363d; padding: 16px 20px; border-radius: 8px; overflow-x: auto; }
-pre code { background: none; border: none; padding: 0; color: #e6e6e6; }
-blockquote { border-left: 4px solid #30363d; margin: 1em 0; padding: .5em 16px; color: #8b949e; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #30363d; padding: 10px 14px; }
-th { background: #161b22; color: #f0f6fc; }
-img { max-width: 100%; border-radius: 6px; }
-hr { border: none; border-top: 1px solid #30363d; margin: 2em 0; }
-input, textarea, select, button { background: #21262d; border: 1px solid #30363d; color: #e6e6e6; border-radius: 6px; padding: 8px 12px; outline: none; }
-button { background: #238636; border-color: #2ea043; color: #fff; cursor: pointer; }
-`,
-
-  warm: `
-html { background: #faf6f1; }
-body { background: #faf6f1; color: #2c1810; max-width: 780px; margin: 0 auto; padding: 56px 28px; line-height: 1.8; font-size: 17px; }
-h1,h2,h3,h4,h5,h6 { color: #1a0e08; font-weight: 800; margin: 1.4em 0 .4em; font-family: 'Georgia', serif; }
-h1 { font-size: 2.4em; border-bottom: 3px solid #e8d5c0; padding-bottom: .3em; }
-h2 { font-size: 1.8em; }
-p { margin: .8em 0; }
-a { color: #b45309; text-decoration: none; border-bottom: 1px solid #e8d5c0; }
-a:hover { border-bottom-color: #b45309; }
-code { background: #f3e8dc; padding: 2px 7px; border-radius: 4px; font-size: .9em; color: #92400e; }
-pre { background: #f3e8dc; padding: 18px; border-radius: 8px; overflow-x: auto; border: 1px solid #e8d5c0; }
-pre code { background: none; padding: 0; color: #2c1810; }
-blockquote { border-left: 4px solid #d97706; margin: 1em 0; padding: .5em 18px; color: #78350f; background: #fffbeb; border-radius: 0 6px 6px 0; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #e8d5c0; padding: 10px 14px; }
-th { background: #fef3c7; color: #1a0e08; }
-img { max-width: 100%; border-radius: 8px; }
-hr { border: none; border-top: 2px solid #e8d5c0; margin: 2em 0; }
-`,
-
-  ocean: `
-html { background: #f0f7f4; }
-body { background: #f0f7f4; color: #0f3d3e; max-width: 800px; margin: 0 auto; padding: 52px 28px; line-height: 1.75; font-size: 17px; font-family: 'Inter', system-ui, sans-serif; }
-h1,h2,h3,h4,h5,h6 { color: #0a2e2f; font-weight: 700; margin: 1.3em 0 .4em; }
-h1 { font-size: 2.3em; border-bottom: 3px solid #99d5cf; padding-bottom: .25em; }
-h2 { font-size: 1.7em; }
-p { margin: .8em 0; }
-a { color: #0e7490; text-decoration: none; }
-a:hover { text-decoration: underline; }
-code { background: #d1fae5; padding: 2px 7px; border-radius: 4px; font-size: .9em; color: #065f46; }
-pre { background: #e0f2f1; padding: 18px; border-radius: 10px; overflow-x: auto; border: 1px solid #99d5cf; }
-pre code { background: none; padding: 0; color: #0f3d3e; }
-blockquote { border-left: 4px solid #14b8a6; margin: 1em 0; padding: .5em 18px; color: #134e4a; background: #ccfbf1; border-radius: 0 8px 8px 0; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #99d5cf; padding: 10px 14px; }
-th { background: #e0f2f1; color: #0a2e2f; }
-img { border-radius: 8px; }
-`,
-
-  retro: `
-html { background: #000; color: #0f0; font-family: 'Courier New', monospace; }
-body { background: #000; color: #0f0; padding: 32px 20px; line-height: 1.6; font-size: 15px; max-width: 75ch; margin: 0 auto; }
-h1,h2,h3,h4,h5,h6 { color: #0f0; font-weight: bold; text-transform: uppercase; margin: 1.2em 0 .3em; }
-h1 { font-size: 1.8em; border-bottom: 1px solid #0f0; }
-h2 { font-size: 1.4em; }
-a { color: #0ff; text-decoration: none; }
-a:hover { text-decoration: underline; }
-code, pre { color: #0f0; font-family: 'Courier New', monospace; }
-code { background: #111; padding: 2px 6px; }
-pre { background: #0a0a0a; padding: 16px; border: 1px solid #0f0; overflow-x: auto; }
-blockquote { border-left: 3px solid #0f0; margin: 1em 0; padding: .5em 16px; color: #0c0; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #0f0; padding: 8px 12px; }
-th { color: #0f0; }
-hr { border: none; border-top: 1px solid #0f0; }
-input, textarea, select, button { background: #111; border: 1px solid #0f0; color: #0f0; font-family: inherit; padding: 6px 10px; }
-`,
-
-  neon: `
-html { background: #09000d; }
-body { background: #09000d; color: #e8d5f5; max-width: 820px; margin: 0 auto; padding: 52px 28px; line-height: 1.7; font-size: 17px; }
-h1,h2,h3,h4,h5,h6 { color: #fff; font-weight: 800; margin: 1.3em 0 .4em; font-style: italic; text-shadow: 0 0 20px rgba(192,132,252,.6); }
-h1 { font-size: 2.5em; border-bottom: 2px solid #c084fc; }
-h2 { font-size: 1.8em; }
-p { margin: .8em 0; }
-a { color: #f0abfc; text-decoration: none; text-shadow: 0 0 8px rgba(240,171,252,.4); }
-a:hover { text-shadow: 0 0 16px rgba(240,171,252,.8); }
-code { background: rgba(192,132,252,.15); padding: 3px 8px; border-radius: 5px; color: #e879f9; border: 1px solid rgba(192,132,252,.3); }
-pre { background: rgba(88,28,135,.3); padding: 18px; border-radius: 12px; overflow-x: auto; border: 1px solid rgba(192,132,252,.25); }
-pre code { background: none; border: none; color: #e8d5f5; }
-blockquote { border-left: 4px solid #c084fc; margin: 1em 0; padding: .5em 18px; color: #d8b4fe; background: rgba(88,28,135,.15); border-radius: 0 8px 8px 0; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid rgba(192,132,252,.3); padding: 10px 14px; }
-th { color: #fff; background: rgba(192,132,252,.1); }
-img { max-width: 100%; border-radius: 10px; }
-hr { border: none; border-top: 1px solid rgba(192,132,252,.3); margin: 2em 0; }
-input, textarea, select, button { background: rgba(88,28,135,.25); border: 1px solid rgba(192,132,252,.4); color: #e8d5f5; border-radius: 8px; padding: 8px 12px; outline: none; }
-`,
-
-  sage: `
-html { background: #f5f5f0; }
-body { background: #f5f5f0; color: #2d3a2e; max-width: 760px; margin: 0 auto; padding: 56px 28px; line-height: 1.75; font-size: 17px; }
-h1,h2,h3,h4,h5,h6 { color: #1e3a1f; font-weight: 700; margin: 1.3em 0 .4em; font-family: 'Georgia', serif; }
-h1 { font-size: 2.2em; border-bottom: 2px solid #c8d6c0; padding-bottom: .3em; }
-h2 { font-size: 1.6em; }
-p { margin: .8em 0; }
-a { color: #3b7a1e; text-decoration: none; }
-a:hover { text-decoration: underline; }
-code { background: #e8ede5; padding: 2px 7px; border-radius: 4px; font-size: .9em; color: #2d5a1e; }
-pre { background: #e8ede5; padding: 18px; border-radius: 8px; overflow-x: auto; border: 1px solid #c8d6c0; }
-pre code { background: none; padding: 0; }
-blockquote { border-left: 4px solid #7aa96e; margin: 1em 0; padding: .5em 18px; color: #3f5e35; background: #f0f5ed; border-radius: 0 8px 8px 0; }
-table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-td, th { border: 1px solid #c8d6c0; padding: 10px 14px; }
-th { background: #e8ede5; }
-img { border-radius: 8px; }
-hr { border: none; border-top: 1px solid #c8d6c0; margin: 2em 0; }
-input, textarea, select, button { background: #fff; border: 1px solid #c8d6c0; color: #2d3a2e; border-radius: 6px; padding: 8px 12px; }
-`,
-
-  stress: `
-*,*::before,*::after { box-sizing: border-box; }
-html { font-size: 16px; scroll-behavior: smooth; }
-body { margin: 0; min-height: 100vh; font-family: system-ui,-apple-system,sans-serif; line-height: 1.6; color: #111; background: #fff; }
-h1,h2,h3,h4,h5,h6 { margin: 1em 0 .4em; line-height: 1.3; font-weight: 700; }
-h1 { font-size: clamp(1.8rem,5vw,3rem); }
-h2 { font-size: clamp(1.4rem,4vw,2.2rem); }
-p { margin: .8em 0; max-width: 70ch; }
-a { color: #0066cc; }
-img { max-width: 100%; height: auto; display: block; }
-table { border-collapse: collapse; width: 100%; }
-td,th { padding: .6em 1em; border: 1px solid #ddd; text-align: left; }
-th { background: #f5f5f5; font-weight: 600; }
-pre,blockquote { padding: 1em; border-radius: 8px; overflow-x: auto; }
-pre { background: #f7f7f7; }
-blockquote { border-left: 4px solid #0066cc; margin: 1em 0; color: #555; }
-hr { border: none; border-top: 1px solid #eee; margin: 2em 0; }
-`
-};
-
-// ─── Apply / download ─────────────────────────────────
-function injectTheme(html, themeCSS) {
-  if (!themeCSS) return html;
-
-  // Insert <style> right after <head> or prepend if no head
-  const headMatch = html.match(/<head[^>]*>/i);
-  if (headMatch) {
-    const idx = headMatch.index + headMatch[0].length;
-    return html.slice(0, idx) + '\n<style id="app-theme">\n' + themeCSS + '\n</style>' + html.slice(idx);
-  } else {
-    return '<head><meta charset="UTF-8"><style id="app-theme">\n' + themeCSS + '\n</style></head>' + html;
-  }
+/* ── Inject <style> right after <head> ── */
+function injectCSS(html, css){
+  const m = html.match(/<head[^>]*>/i);
+  const tag = '<style id="__app_theme__">/* Theme */\n' + css + '\n</style>';
+  return m
+    ? html.slice(0, m.index + m[0].length) + '\n' + tag + html.slice(m.index + m[0].length)
+    : '<head>' + tag + '</head>' + html;
 }
 
-applyBtn.addEventListener('click', () => {
-  const theme = themeSelect.value;
-  if (theme === 'none' || !originalHTML) return;
+/* ── Render into canvas ── */
+function renderInCanvas(html){
+  const doc = canvas.contentDocument || canvas.contentWindow.document;
+  doc.open();
+  doc.write(html);
+  doc.close();
+  canvas.classList.add('show');
+}
 
-  themedHTML = injectTheme(originalHTML, THEMES[theme]);
-
-  // Update iframe
-  emptyState.classList.add('hidden');
-  preview.srcdoc = themedHTML;
-
-  downloadBtn.disabled = false;
-
-  // Visual feedback
-  applyBtn.textContent = '✅ 已应用';
-  setTimeout(() => { applyBtn.textContent = '🎨 应用主题'; }, 1500);
-});
-
-themeSelect.addEventListener('change', () => {
-  applyBtn.disabled = !originalHTML || themeSelect.value === 'none';
-});
-
-downloadBtn.addEventListener('click', () => {
-  if (!themedHTML) return;
-  const blob = new Blob([themedHTML], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  // Suggest filename
-  const origName = fileInfo.textContent.split(' ')[0] || 'page';
-  a.download = origName.replace(/\.html?$/i, '') + '_themed.html';
-  document.body.appendChild(a);
-  a.click();
+/* ── Download ── */
+dlBtn.addEventListener('click', () => {
+  if(!currentTheme) return;
+  const css   = THEMES[currentTheme]();
+  const finalHTML = injectCSS(originalHTML, css);
+  const blob  = new Blob([finalHTML], { type:'text/html;charset=utf-8' });
+  const url   = URL.createObjectURL(blob);
+  const a     = Object.assign(document.createElement('a'), { href:url });
+  const baseName = (fileName.textContent.split(' ')[0] || 'page').replace(/\.html?$/i,'');
+  a.download = baseName + '_' + currentTheme + '.html';
+  document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  toastMsg('已下载 ✨');
 });
 
-// ─── Re-enable buttons when new file loaded ───────────
-fileInput.addEventListener('change', () => {
-  applyBtn.disabled = themeSelect.value === 'none';
-});
-reloadBtn.addEventListener('click', () => {
-  fileInput.click();
-});
+/* ── Toast ── */
+let toastTimer;
+function toastMsg(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+/* Init */
+buildThemeButtons();
 </script>
 </body>
 </html>
