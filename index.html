@@ -120,7 +120,7 @@
     </div>
     <div class="header-right">
       <div class="status" id="statusText">上传后自动生成 10 套结构完全不同的 UI/UX</div>
-      <button class="btn" id="chooseBtn">上传 HTML</button>
+      <label class="btn" id="chooseBtn" for="fileInput">上传 HTML</label>
       <button class="btn primary" id="downloadAllBtn" disabled>下载全部</button>
     </div>
   </header>
@@ -141,14 +141,14 @@
   </section>
 
   <main class="main" id="mainArea">
-    <div class="upload-zone" id="uploadZone">
+    <label class="upload-zone" id="uploadZone" for="fileInput">
       <div class="upload-box">
         <div class="upload-emoji">📄</div>
         <div class="upload-title">拖进来一个 HTML，直接生成 10 套不同 UI/UX</div>
         <div class="upload-copy">上传后会并排展示 10 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体。</div>
         <div class="upload-pill">点击这里或拖拽 .html / .htm 文件进来</div>
       </div>
-    </div>
+    </label>
     <div class="drop-overlay" id="dropOverlay">松开鼠标以上传</div>
     <div class="empty-state" id="emptyState">
       <div class="empty-card">
@@ -320,8 +320,6 @@
       reader.readAsText(file);
     }
 
-    chooseBtn.addEventListener('click', () => fileInput.click());
-    uploadZone.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
     downloadAllBtn.addEventListener('click', downloadAll);
     mainArea.addEventListener('dragover', e => { e.preventDefault(); dropOverlay.classList.add('visible'); });
