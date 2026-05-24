@@ -47,14 +47,18 @@
       display: flex; align-items: center; gap: 12px;
       padding: 12px 16px; background: rgba(6, 9, 17, .58);
       border-bottom: 1px solid rgba(148, 163, 184, .08); backdrop-filter: blur(24px);
-      flex: 0 0 auto;
+      flex: 0 0 auto; flex-wrap: wrap;
     }
-    .brand { min-width: 0; flex: 1; display: flex; align-items: center; gap: 12px; }
-    .logo { width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center;
-      background: linear-gradient(135deg, rgba(125,211,252,.95), rgba(167,139,250,.92)); box-shadow: 0 10px 26px rgba(125, 211, 252, .14); font-size: 18px; flex: 0 0 auto; }
-    .brand h1 { margin: 0; font-size: 15px; line-height: 1.1; white-space: nowrap; }
-    .brand .sub { display: block; margin-top: 3px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 56vw; }
-    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .brand { min-width: 0; flex: 1 1 280px; display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 40px; height: 40px; border-radius: 14px; flex: 0 0 auto; overflow: hidden;
+      display: grid; place-items: center; background: linear-gradient(135deg, rgba(125,211,252,.95), rgba(167,139,250,.92));
+      box-shadow: 0 10px 26px rgba(125, 211, 252, .14), inset 0 1px 0 rgba(255,255,255,.2);
+    }
+    .logo svg { width: 100%; height: 100%; display: block; }
+    .title { margin: 0; font-size: 15px; line-height: 1.02; letter-spacing: -.04em; font-weight: 700; white-space: nowrap; }
+    .brand .sub { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 56vw; }
+    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
     .status { color: var(--muted); font-size: 12px; white-space: nowrap; }
     .btn {
       appearance: none; border: 1px solid rgba(148, 163, 184, .16); background: rgba(255, 255, 255, .03); color: var(--text);
@@ -193,8 +197,14 @@
       body { overflow: auto; }
       .topbar, .hero, .main { padding-left: 12px; padding-right: 12px; }
       .hero-card { flex-direction: column; }
-      .header-right { width: 100%; justify-content: space-between; }
+      .brand { flex-basis: 100%; }
       .brand .sub { max-width: 42vw; }
+      .header-right {
+        width: 100%; margin-left: 0; display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+      .header-right .status { grid-column: 1 / -1; white-space: normal; }
+      .header-right .btn { width: 100%; }
       .preview-grid { grid-template-columns: 1fr; }
       .theme-frame { height: 390px; }
       .upload-zone, .drop-overlay, .grid-shell { inset: 12px; }
@@ -205,9 +215,21 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="logo">✦</div>
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HTML Theme Preview">
+          <defs>
+            <linearGradient id="logoGrad" x1="2" y1="2" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#7dd3fc"/>
+              <stop offset="1" stop-color="#a78bfa"/>
+            </linearGradient>
+          </defs>
+          <rect x="1.5" y="1.5" width="37" height="37" rx="13" fill="url(#logoGrad)"/>
+          <path d="M12 14h6M12 20h4M12 26h6" stroke="white" stroke-width="2.6" stroke-linecap="round" opacity=".95"/>
+          <path d="M22 13l6 7-6 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+        </svg>
+      </div>
       <div>
-        <div class="title">HTML Theme Preview</div>
+        <h1 class="title">HTML Theme Preview</h1>
         <div class="sub" id="fileName">尚未上传 HTML</div>
       </div>
     </div>
