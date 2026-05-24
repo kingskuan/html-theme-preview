@@ -68,7 +68,7 @@
     .main { position: relative; flex: 1 1 auto; min-height: 0; padding: 14px 16px 16px; overflow: hidden; }
     .upload-zone {
       position: absolute; inset: 14px 16px 16px; z-index: 3; display: grid; place-items: center; text-align: center;
-      border-radius: 24px; border: 1px dashed rgba(148, 163, 184, .30); background: linear-gradient(180deg, rgba(15,23,42,.50), rgba(15,23,42,.24)); cursor: pointer;
+      border-radius: 24px; border: 1px dashed rgba(148, 163, 184, .30); background: linear-gradient(180deg, rgba(15,23,42,.50), rgba(15,23,42,.24));
     }
     .upload-zone.hidden { opacity: 0; pointer-events: none; transform: scale(.99); }
     .upload-box { width: min(760px, 100%); padding: 30px 24px; border-radius: 22px; background: rgba(15, 23, 42, .78); border: 1px solid rgba(148, 163, 184, .16); box-shadow: var(--shadow); }
@@ -163,15 +163,15 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="logo">🌐</div>
-      <div style="min-width:0">
-        <h1>HTML Theme Preview</h1>
-        <span class="sub" id="fileName">尚未上传 HTML</span>
+      <div class="logo">✦</div>
+      <div>
+        <div class="title">HTML Theme Preview</div>
+        <div class="sub">把一个 HTML 变成 10 套完全不同的 UI/UX</div>
       </div>
     </div>
     <div class="header-right">
       <div class="status" id="statusText">上传后自动生成 10 套结构完全不同的 UI/UX</div>
-      <label class="btn" id="chooseBtn" for="fileInput">上传 HTML</label>
+      <button class="btn" id="chooseBtn" type="button">上传 HTML</button>
       <button class="btn primary" id="downloadAllBtn" disabled>下载全部</button>
     </div>
   </header>
@@ -192,7 +192,7 @@
   </section>
 
   <main class="main" id="mainArea">
-    <label class="upload-zone" id="uploadZone" for="fileInput">
+    <div class="upload-zone" id="uploadZone">
       <div class="upload-box">
         <div class="upload-emoji">📄</div>
         <div class="upload-title">拖进来一个 HTML，直接生成 10 套不同 UI/UX</div>
@@ -204,7 +204,7 @@
         <textarea class="upload-paste" id="htmlPaste" placeholder="把 HTML 直接贴进来，或者先上传文件后再贴文本替换当前内容"></textarea>
         <div class="upload-notice" id="uploadNotice">支持 3 种入口：原生选择文件 / 拖拽文件 / 粘贴 HTML 文本。成功后会自动生成 10 套预览；失败会直接提示原因。</div>
       </div>
-    </label>
+    </div>
     <div class="drop-overlay" id="dropOverlay">松开鼠标以上传</div>
     <div class="empty-state" id="emptyState">
       <div class="empty-card">
@@ -419,9 +419,13 @@
     }
 
     chooseBtn.addEventListener('click', () => nativeFileInput.click());
-    uploadZone.addEventListener('click', () => nativeFileInput.click());
+    uploadZone.addEventListener('click', e => {
+      if (e.target.closest('input, textarea, button, label, a')) return;
+      nativeFileInput.click();
+    });
     nativeFileInput.addEventListener('change', e => handleFile(e.target.files[0]));
     fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    [nativeFileInput, pasteHtmlBtn, htmlPaste].forEach(node => node.addEventListener('click', e => e.stopPropagation()));
     pasteHtmlBtn.addEventListener('click', async () => {
       const text = htmlPaste.value.trim();
       if (text) return handleSourceHTML(text, 'pasted.html');
