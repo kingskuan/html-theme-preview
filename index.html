@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%237dd3fc'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Cpath d='M32 14l4.6 11.4L48 30l-11.4 4.6L32 46l-4.6-11.4L16 30l11.4-4.6L32 14z' fill='white' fill-opacity='.95'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23070b14'/%3E%3Crect x='12' y='12' width='40' height='40' rx='12' fill='none' stroke='%23cbd5e1' stroke-opacity='.22'/%3E%3Cpath d='M17 37h8l5-9 7 14 5-6h5' fill='none' stroke='%232dd4bf' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='45' cy='19' r='3' fill='%23f8fafc' fill-opacity='.9'/%3E%3C/svg%3E" />
   <title>HTML Theme Preview</title>
   <style>
     :root {
@@ -52,8 +52,10 @@
     .brand { min-width: 0; flex: 1 1 280px; display: flex; align-items: center; gap: 12px; }
     .logo {
       width: 40px; height: 40px; border-radius: 14px; flex: 0 0 auto; overflow: hidden;
-      display: grid; place-items: center; background: linear-gradient(135deg, rgba(125,211,252,.95), rgba(167,139,250,.92));
-      box-shadow: 0 10px 26px rgba(125, 211, 252, .14), inset 0 1px 0 rgba(255,255,255,.2);
+      display: grid; place-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border: 1px solid rgba(203, 213, 225, .16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
     }
     .logo svg { width: 100%; height: 100%; display: block; }
     .title { margin: 0; font-size: 15px; line-height: 1.02; letter-spacing: -.04em; font-weight: 700; white-space: nowrap; }
@@ -217,15 +219,9 @@
     <div class="brand">
       <div class="logo" aria-hidden="true">
         <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HTML Theme Preview">
-          <defs>
-            <linearGradient id="logoGrad" x1="2" y1="2" x2="38" y2="38" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stop-color="#7dd3fc"/>
-              <stop offset="1" stop-color="#a78bfa"/>
-            </linearGradient>
-          </defs>
-          <rect x="1.5" y="1.5" width="37" height="37" rx="13" fill="url(#logoGrad)"/>
-          <path d="M12 14h6M12 20h4M12 26h6" stroke="white" stroke-width="2.6" stroke-linecap="round" opacity=".95"/>
-          <path d="M22 13l6 7-6 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+          <rect x="1.5" y="1.5" width="37" height="37" rx="13" fill="#0a0f19" stroke="#e2e8f0" stroke-opacity=".18"/>
+          <path d="M12 26h5l4-8 6 11 3-4h2" fill="none" stroke="#2dd4bf" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="28.5" cy="14" r="2.4" fill="#f8fafc" fill-opacity=".9"/>
         </svg>
       </div>
       <div>
@@ -245,7 +241,7 @@
       <div class="hero-copy">
         <div class="eyebrow">结构重排，不是换字体</div>
         <h2>上传一个 HTML，自动重构成 10 套完全不同的设计语言。</h2>
-        <p>我不会只改字重和颜色，而是把同一份内容拆成不同的页面结构：有的像文档站，有的像仪表盘，有的是杂志排版、玻璃面板、终端窗口、粗野海报、纸感笔记本。每套都可单独下载。</p>
+        <p>我不会只改字重和颜色，而是把同一份内容拆成不同的页面结构：有的像文档站，有的像仪表盘，也能适配交易监控、数据看板、终端、杂志、玻璃面板和极简阅读。每套都可单独下载。</p>
       </div>
       <div class="hero-meta">
         <span class="chip">10 套布局</span>
@@ -260,7 +256,7 @@
       <div class="upload-box">
         <div class="upload-emoji">✦</div>
         <div class="upload-title">拖进来一个 HTML，直接生成 10 套不同 UI/UX</div>
-        <div class="upload-copy">上传后会并排展示 10 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体。</div>
+        <div class="upload-copy">上传后会并排展示 10 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体；其中也包含更适合交易监控、数据面板的结构模板。</div>
         <div class="upload-actions">
           <input class="upload-input" id="nativeFileInput" type="file" accept=".html,.htm" />
           <button class="btn" id="pasteHtmlBtn" type="button">粘贴 HTML</button>
@@ -294,6 +290,10 @@
       notion: {
         label: 'Notion 深排版', desc: '文档 / 大留白 / 章节阅读', swatch: '#e7ece6',
         render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Notion</title><style>${baseReset()}${notionCss()}</style></head><body><div class="notion"><aside class="sidebar"><div class="minihead">Workspace</div><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p>${renderToc(src.headings)}</aside><main class="doc"><header class="hero"><span class="label">Reading mode</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></header><article>${src.bodyHTML}</article></main></div></body></html>`
+      },
+      market: {
+        label: '交易监控', desc: 'K 线仪表盘 / 告警 / 快照', swatch: '#2dd4bf',
+        render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Market</title><style>${baseReset()}${marketCss()}</style></head><body><div class="market"><header class="mast"><div><span class="pill">Market monitor</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></div><div class="signal"><span>Live</span><span>${src.blockCount} blocks</span><span>${src.headings.length} headings</span></div></header>${renderMarketBlocks(src)}</div></body></html>`
       },
       linear: {
         label: 'Linear Console', desc: '高密度控制台 / 产品感', swatch: '#ff8a65',
@@ -336,7 +336,7 @@
         render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Gallery</title><style>${baseReset()}${galleryCss()}</style></head><body><div class="gallery"><header><span class="pill">Gallery</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></header><section class="masonry">${renderGalleryCards(src.blocks)}</section></div></body></html>`
       }
     };
-    const THEME_ORDER = ['vercel','stripe','linear','notion','editorial','glass','brutalist','terminal','magazine','minimal'];
+    const THEME_ORDER = ['vercel','market','stripe','linear','notion','editorial','glass','brutalist','terminal','minimal'];
     const SWATCHES = Object.fromEntries(Object.entries(THEMES).map(([k, v]) => [k, v.swatch]));
     const el = id => document.getElementById(id);
     const fileInput = el('fileInput');
@@ -422,13 +422,21 @@
     function glassCss(){ return `body{margin:0;min-height:100vh;font:15px/1.75 Inter,sans-serif;color:#ecfeff;overflow:hidden;background:radial-gradient(circle at top left,#0ea5e9 0,transparent 28%),radial-gradient(circle at top right,#8b5cf6 0,transparent 24%),linear-gradient(160deg,#07111f 0,#0b1120 48%,#020617 100%)}.bg{position:fixed;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent 40%);backdrop-filter:blur(24px)}.chrome{position:relative;max-width:1280px;margin:0 auto;padding:24px 22px 36px;z-index:1}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:20px 22px;border:1px solid rgba(255,255,255,.14);border-radius:28px;background:rgba(8,15,30,.46);backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.25)}.top h1{font:900 clamp(2rem,4vw,3.6rem)/1.05 Inter,sans-serif;letter-spacing:-.05em;color:#fff;margin:.2em 0}.dots{display:flex;gap:10px;padding-top:10px}.dots span{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.8)}.grid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;margin-top:16px}.rail,.stack .glasscard{border:1px solid rgba(255,255,255,.14);background:rgba(10,16,32,.54);backdrop-filter:blur(18px);border-radius:24px;box-shadow:0 18px 54px rgba(0,0,0,.25)}.rail{padding:18px;position:sticky;top:24px;height:calc(100vh - 48px);overflow:auto}.card.mini{margin-top:14px;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)}.stack{display:grid;gap:14px;align-content:start}.glasscard{padding:18px}.glasscard>*+*{margin-top:10px}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);font:700 12px/1 Inter,sans-serif}.label{display:inline-block;margin-bottom:10px;color:#bae6fd;font:700 12px/1 Inter,sans-serif;text-transform:uppercase;letter-spacing:.08em}pre,table,blockquote{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px}pre{padding:16px;overflow:auto}code{background:rgba(255,255,255,.12);padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}@media(max-width:960px){body{overflow:auto}.grid{grid-template-columns:1fr}.rail{position:static;height:auto}}`; }
     function brutalistCss(){ return `body{margin:0;background:#f8f400;font:17px/1.7 Arial,Helvetica,sans-serif;color:#000}.poster{max-width:1280px;margin:0 auto;padding:18px}.mast{border:6px solid #000;background:#fff;padding:24px 22px;box-shadow:10px 10px 0 #000}.stamp{display:inline-block;padding:6px 10px;border:3px solid #000;font:900 12px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mast h1{font:900 clamp(2.8rem,7vw,6rem)/.92 Arial,sans-serif;letter-spacing:-.06em;text-transform:uppercase;margin:.2em 0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:14px}.poster-card{grid-column:span 4;border:5px solid #000;background:#fff;padding:18px;box-shadow:8px 8px 0 #000}.poster-card:nth-child(4n){grid-column:span 8}.poster-card span{display:inline-block;margin-bottom:8px;background:#000;color:#fff;padding:4px 8px;font:900 12px/1 Arial,sans-serif}h1,h2,h3{text-transform:uppercase;line-height:.95}pre,table,blockquote{background:#fff;border:4px solid #000}pre{padding:16px;overflow:auto}code{background:#000;color:#fff;padding:.15em .35em}img{max-width:100%;border:5px solid #000}@media(max-width:900px){.poster-card,.poster-card:nth-child(4n){grid-column:span 12}}`; }
     function terminalCss(){ return `body{margin:0;background:#050505;font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;color:#a3f7b0}.term{max-width:1180px;margin:0 auto;padding:28px 20px 80px}.bar{display:flex;gap:8px;padding:12px 14px;background:#111;border:1px solid #263238;border-bottom:none;border-radius:18px 18px 0 0}.bar span{width:12px;height:12px;border-radius:50%;background:#2dd4bf}.bar span:nth-child(2){background:#f59e0b}.bar span:nth-child(3){background:#ef4444}.screen{border:1px solid #263238;border-radius:0 0 18px 18px;background:#08110a;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.35)}.prompt{color:#7dff98;margin-bottom:16px}.log{display:grid;gap:12px}.cmd{padding:14px;border:1px solid #1f3b2a;border-radius:14px;background:#061107}.out{margin-top:8px;color:#c8ffd0}.footer{margin-top:16px;padding-top:14px;border-top:1px solid #17321f;color:#7fb38a}pre,table,blockquote{background:#07130a;border:1px solid #1f3b2a;border-radius:12px}pre{padding:14px;overflow:auto}code{background:#12301a;color:#d1fae5;padding:.15em .35em;border-radius:6px}a{color:#7dff98}img{max-width:100%;border-radius:12px}`; }
-    function magazineCss(){ return `body{margin:0;background:#fff7f1;font:16px/1.85 Inter,sans-serif;color:#1f2937}.mag{max-width:1280px;margin:0 auto;padding:28px 20px 84px}.mast{padding-bottom:20px;border-bottom:1px solid #e7d8cc}.eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:#111;color:#fff;font:700 12px/1 Inter,sans-serif}.mast h1{font:900 clamp(2.4rem,6vw,5rem)/.95 Georgia,serif;letter-spacing:-.05em;margin:.2em 0}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) 320px;gap:18px;margin-top:18px}.story,.side{background:#fff;border:1px solid #ecdccc;border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.06)}.story{padding:26px}.story>*+*{margin-top:14px}.side{padding:18px;position:sticky;top:20px;height:fit-content;display:grid;gap:12px}.side blockquote{margin:0;padding:14px 16px;border-left:4px solid #d97706;background:#fff7eb;border-radius:0 14px 14px 0;font:600 15px/1.6 Inter,sans-serif}pre,table,blockquote{background:#fff;border:1px solid #ecdccc;border-radius:16px}pre{padding:16px;overflow:auto}code{background:#fff1e6;padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}@media(max-width:980px){.layout{grid-template-columns:1fr}.side{position:static}}`; }
+    function marketCss(){ return `body{margin:0;background:#050814;font:14.5px/1.72 Inter,sans-serif;color:#e2e8f0}.market{max-width:1280px;margin:0 auto;padding:26px 20px 88px}.mast{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:22px;border:1px solid #233042;border-radius:24px;background:linear-gradient(180deg,#0c1422,#070b14);box-shadow:0 22px 60px rgba(0,0,0,.24)}.mast h1{font:900 clamp(2rem,4vw,3.6rem)/1.04 Inter,sans-serif;letter-spacing:-.05em;color:#fff;margin:.2em 0}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#102132;color:#b6f7e4;border:1px solid #1f3b31;font:700 12px/1 Inter,sans-serif}.signal{display:flex;gap:10px;flex-wrap:wrap}.signal span{padding:8px 10px;border-radius:999px;background:#0b1321;border:1px solid #233042;color:#cbd5e1;font-size:12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}.metric{padding:16px;border-radius:18px;border:1px solid #223047;background:linear-gradient(180deg,#101826,#0a111b)}.metric b{display:block;font-size:28px;color:#fff;line-height:1}.metric span{display:block;margin-top:8px;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.feed{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}.tick{grid-column:span 4;padding:16px;border-radius:18px;border:1px solid #223047;background:#0d1420;box-shadow:0 12px 34px rgba(0,0,0,.18)}.tick:nth-child(4n){grid-column:span 8}.tick>*+*{margin-top:10px}h1,h2,h3{line-height:1.1;color:#fff}pre,table,blockquote{background:#08111c;border:1px solid #223047;border-radius:16px}pre{padding:16px;overflow:auto}code{background:#102132;color:#86efac;padding:.15em .35em;border-radius:6px}a{color:#86efac}img{max-width:100%;border-radius:14px}@media(max-width:900px){.mast{flex-direction:column;align-items:flex-start}.metrics,.feed{grid-template-columns:1fr}.tick,.tick:nth-child(4n){grid-column:span 1}}`; }
     function minimalCss(){ return `body{margin:0;background:#fff;font:17px/1.9 Inter,sans-serif;color:#111}.wrap{max-width:860px;margin:0 auto;padding:48px 20px 88px}.head{padding-bottom:18px;border-bottom:1px solid #eee}.head h1{font:800 clamp(2.2rem,5vw,3.8rem)/1.05 Inter,sans-serif;letter-spacing:-.05em;margin:.2em 0}.tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#111;color:#fff;font:700 12px/1 Inter,sans-serif}.article{padding-top:26px}.article>*+*{margin-top:18px}h1,h2,h3{line-height:1.08}p,li{color:#222}pre,table,blockquote{border:1px solid #eee;border-radius:16px;background:#fafafa}pre{padding:16px;overflow:auto}code{background:#f3f4f6;padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}`; }
     function notebookCss(){ return `body{margin:0;background:linear-gradient(180deg,#fdf3b5 0,#fde68a 100%);font:15px/1.7 Inter,sans-serif;color:#1f2937}.pad{max-width:1280px;margin:0 auto;padding:24px;display:grid;grid-template-columns:280px 1fr;gap:16px}.rail,.board{background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.08);border-radius:22px;box-shadow:0 14px 40px rgba(0,0,0,.08)}.rail{padding:18px;position:sticky;top:24px;height:calc(100vh - 48px);overflow:auto}.rail .title{font:900 28px/1.05 Inter,sans-serif;letter-spacing:-.04em;margin-bottom:10px}.board{padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-content:start}.sticky{padding:14px 14px 16px;border:2px solid rgba(0,0,0,.12);border-radius:18px;transform:rotate(var(--r,0deg));box-shadow:4px 8px 0 rgba(0,0,0,.12)}.sticky header{font:800 12px/1 Inter,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}.s0{background:#fff1f2}.s1{background:#eff6ff}.s2{background:#ecfdf5}.s3{background:#fff7ed}.s4{background:#f5f3ff}.s5{background:#fef3c7}.sticky:nth-child(2n){--r:-1.3deg}.sticky:nth-child(3n){--r:1.1deg}.sticky:nth-child(4n){--r:-.8deg}pre,table,blockquote{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);border-radius:14px}pre{padding:14px;overflow:auto}code{background:rgba(255,255,255,.8);padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}@media(max-width:960px){.pad{grid-template-columns:1fr}.rail{position:static;height:auto}}`; }
     function galleryCss(){ return `body{margin:0;background:#f8fafc;font:15.5px/1.8 Inter,sans-serif;color:#0f172a}.gallery{max-width:1280px;margin:0 auto;padding:28px 20px 88px}.gallery header{padding:14px 0 22px;border-bottom:1px solid #e2e8f0}.gallery h1{font:900 clamp(2.2rem,5vw,4rem)/1.02 Inter,sans-serif;letter-spacing:-.05em;margin:.2em 0}.masonry{columns:3 280px;column-gap:14px;margin-top:16px}.gcard{break-inside:avoid;padding:16px;border-radius:18px;border:1px solid #dbe4f0;background:#fff;box-shadow:0 12px 34px rgba(15,23,42,.08);margin:0 0 14px}.badge{display:inline-block;margin-bottom:10px;padding:6px 8px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font:700 12px/1 Inter,sans-serif}.gcard>*+*{margin-top:10px}pre,table,blockquote{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px}pre{padding:14px;overflow:auto}code{background:#eff6ff;color:#1d4ed8;padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}`; }
 
     function renderStripeBlocks(blocks){ return blocks.slice(0,6).map((b,i)=>`<article class="stripecard"><div class="tag">${String(i+1).padStart(2,'0')}</div>${b.html}</article>`).join(''); }
     function renderVercelBlocks(blocks){ return blocks.map((b,i)=>`<section class="vcard"><div class="tag">${String(i+1).padStart(2,'0')}</div>${b.html}</section>`).join(''); }
+    function renderMarketBlocks(src) {
+      const metrics = [
+        ['Blocks', src.blockCount],
+        ['Headings', src.headings.length],
+        ['Words', src.wordCount],
+      ];
+      return `<section class="metrics">${metrics.map(([label, value])=>`<article class="metric"><b>${value}</b><span>${label}</span></article>`).join('')}</section><section class="feed">${src.blocks.map((b,i)=>`<article class="tick"><div class="tag">Tick ${String(i+1).padStart(2,'0')}</div>${b.html}</article>`).join('')}</section>`;
+    }
     function downloadVariant(themeName) {
       if (!source) return;
       const base = (fileName.textContent || 'page').replace(/\.html?$/i, '');
