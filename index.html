@@ -75,7 +75,58 @@
     .upload-emoji { font-size: 54px; margin-bottom: 10px; }
     .upload-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; letter-spacing: -.03em; }
     .upload-copy { color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .upload-pill { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 8px 12px; border-radius: 999px; background: rgba(148, 163, 184, .10); border: 1px solid rgba(148, 163, 184, .16); color: #dbeafe; font-size: 12px; }
+    .upload-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 16px;
+      align-items: start;
+    }
+    .upload-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, .22);
+      background: rgba(2, 6, 23, .35);
+      color: #e5e7eb;
+      padding: 10px 12px;
+      font: 13px/1.5 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+    .upload-input::file-selector-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-right: 10px;
+      background: #38bdf8;
+      color: #00111f;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .upload-actions .btn { width: 100%; }
+    .upload-paste {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, .22);
+      background: rgba(2, 6, 23, .35);
+      color: #e5e7eb;
+      padding: 12px;
+      resize: vertical;
+      outline: none;
+      font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .upload-paste::placeholder { color: #94a3b8; }
+    .upload-notice {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, .16);
+      background: rgba(148, 163, 184, .08);
+      color: #dbeafe;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: normal;
+    }
     .drop-overlay { position: absolute; inset: 14px 16px 16px; display: none; align-items: center; justify-content: center; z-index: 4; border-radius: 24px; border: 2px dashed rgba(56, 189, 248, .95); background: rgba(37, 99, 235, .10); color: #bfdbfe; font-size: 18px; pointer-events: none; }
     .drop-overlay.visible { display: flex; }
     .grid-shell { position: absolute; inset: 14px 16px 16px; overflow: auto; border-radius: 24px; }
@@ -146,7 +197,12 @@
         <div class="upload-emoji">📄</div>
         <div class="upload-title">拖进来一个 HTML，直接生成 10 套不同 UI/UX</div>
         <div class="upload-copy">上传后会并排展示 10 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体。</div>
-        <div class="upload-pill">点击这里或拖拽 .html / .htm 文件进来</div>
+        <div class="upload-actions">
+          <input class="upload-input" id="nativeFileInput" type="file" accept=".html,.htm" />
+          <button class="btn" id="pasteHtmlBtn" type="button">粘贴 HTML</button>
+        </div>
+        <textarea class="upload-paste" id="htmlPaste" placeholder="把 HTML 直接贴进来，或者先上传文件后再贴文本替换当前内容"></textarea>
+        <div class="upload-notice" id="uploadNotice">支持 3 种入口：原生选择文件 / 拖拽文件 / 粘贴 HTML 文本。成功后会自动生成 10 套预览；失败会直接提示原因。</div>
       </div>
     </label>
     <div class="drop-overlay" id="dropOverlay">松开鼠标以上传</div>
@@ -219,7 +275,11 @@
     const SWATCHES = Object.fromEntries(Object.entries(THEMES).map(([k, v]) => [k, v.swatch]));
     const el = id => document.getElementById(id);
     const fileInput = el('fileInput');
+    const nativeFileInput = el('nativeFileInput');
     const chooseBtn = el('chooseBtn');
+    const pasteHtmlBtn = el('pasteHtmlBtn');
+    const htmlPaste = el('htmlPaste');
+    const uploadNotice = el('uploadNotice');
     const downloadAllBtn = el('downloadAllBtn');
     const uploadZone = el('uploadZone');
     const dropOverlay = el('dropOverlay');
@@ -235,6 +295,16 @@
 
     function toastMsg(msg) { toast.textContent = msg; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 1600); }
     function escapeHTML(s) { return String(s || '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+    function setNotice(msg, tone = 'info') {
+      uploadNotice.textContent = msg;
+      uploadNotice.dataset.tone = tone;
+    }
+    function normalizeHTMLText(text) {
+      const html = String(text || '').trim();
+      if (!html) throw new Error('空内容');
+      if (!/<[a-z][\s\S]*>/i.test(html)) throw new Error('看起来不是 HTML');
+      return html;
+    }
 
     function baseReset() {
       return `:root{color-scheme:light}*{box-sizing:border-box}html,body{margin:0;padding:0}body{min-height:100vh}img{max-width:100%;height:auto;display:block}a{color:inherit}button,input,textarea,select{font:inherit}`;
@@ -310,17 +380,67 @@
       emptyState.style.display = 'none'; gridShell.style.display = 'block'; uploadZone.classList.add('hidden'); downloadAllBtn.disabled = false; statusText.textContent = '已生成 10 套结构完全不同的预览';
     }
 
+    function handleSourceHTML(html, label = '粘贴的 HTML') {
+      try {
+        const cleaned = normalizeHTMLText(html);
+        source = parseSource(cleaned);
+        fileName.textContent = label;
+        htmlPaste.value = cleaned;
+        renderAll();
+        statusText.textContent = '已载入内容，10 套结构预览已生成';
+        uploadNotice.textContent = '加载成功：可以继续拖拽新文件，或者直接在下面修改 HTML 再重新载入。';
+        toastMsg('HTML 已载入');
+      } catch (err) {
+        const msg = err?.message || 'HTML 解析失败';
+        statusText.textContent = '载入失败';
+        uploadNotice.textContent = msg;
+        toastMsg(msg);
+      }
+    }
+
     function handleFile(file) {
       if (!file) return;
-      if (!/\.html?$/i.test(file.name)) { toastMsg('只支持 .html / .htm'); return; }
-      fileName.textContent = file.name; statusText.textContent = '读取中…';
+      if (!/\.html?$/i.test(file.name)) {
+        statusText.textContent = '载入失败';
+        uploadNotice.textContent = '只支持 .html / .htm 文件';
+        toastMsg('只支持 .html / .htm');
+        return;
+      }
+      fileName.textContent = file.name;
+      statusText.textContent = '读取中…';
       const reader = new FileReader();
-      reader.onload = e => { source = parseSource(e.target.result); renderAll(); toastMsg('HTML 已载入，10 套结构预览已生成'); };
-      reader.onerror = () => { statusText.textContent = '读取失败'; toastMsg('读取文件失败'); };
+      reader.onload = e => handleSourceHTML(e.target.result, file.name);
+      reader.onerror = () => {
+        statusText.textContent = '读取失败';
+        uploadNotice.textContent = '文件读取失败，请换一个 HTML 再试';
+        toastMsg('读取文件失败');
+      };
       reader.readAsText(file);
     }
 
+    chooseBtn.addEventListener('click', () => nativeFileInput.click());
+    uploadZone.addEventListener('click', () => nativeFileInput.click());
+    nativeFileInput.addEventListener('change', e => handleFile(e.target.files[0]));
     fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    pasteHtmlBtn.addEventListener('click', async () => {
+      const text = htmlPaste.value.trim();
+      if (text) return handleSourceHTML(text, 'pasted.html');
+      try {
+        const clip = await navigator.clipboard.readText();
+        if (!clip.trim()) throw new Error('剪贴板里没有 HTML');
+        htmlPaste.value = clip;
+        handleSourceHTML(clip, 'clipboard.html');
+      } catch (err) {
+        const msg = err?.message || '无法读取剪贴板';
+        uploadNotice.textContent = msg;
+        toastMsg(msg);
+      }
+    });
+    htmlPaste.addEventListener('paste', () => {
+      setTimeout(() => {
+        if (htmlPaste.value.trim()) uploadNotice.textContent = '已粘贴 HTML，点击“粘贴 HTML”即可载入并生成预览。';
+      }, 0);
+    });
     downloadAllBtn.addEventListener('click', downloadAll);
     mainArea.addEventListener('dragover', e => { e.preventDefault(); dropOverlay.classList.add('visible'); });
     mainArea.addEventListener('dragleave', e => { if (!mainArea.contains(e.relatedTarget)) dropOverlay.classList.remove('visible'); });
