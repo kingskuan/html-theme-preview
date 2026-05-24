@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23070b14'/%3E%3Crect x='12' y='12' width='40' height='40' rx='12' fill='none' stroke='%23cbd5e1' stroke-opacity='.22'/%3E%3Cpath d='M17 37h8l5-9 7 14 5-6h5' fill='none' stroke='%232dd4bf' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='45' cy='19' r='3' fill='%23f8fafc' fill-opacity='.9'/%3E%3C/svg%3E" />
-  <title>HTML Theme Preview</title>
+  <title>UI Shell Preview</title>
   <style>
     :root {
       --bg: #050814;
@@ -225,12 +225,12 @@
         </svg>
       </div>
       <div>
-        <h1 class="title">HTML Theme Preview</h1>
+        <h1 class="title">UI Shell Preview</h1>
         <div class="sub" id="fileName">尚未上传 HTML</div>
       </div>
     </div>
     <div class="header-right">
-      <div class="status" id="statusText">上传后自动生成 10 套结构完全不同的 UI/UX</div>
+      <div class="status" id="statusText">上传后自动生成 12 套结构完全不同的 UI/UX</div>
       <button class="btn" id="chooseBtn" type="button">上传 HTML</button>
       <button class="btn primary" id="downloadAllBtn" disabled>下载全部</button>
     </div>
@@ -240,7 +240,7 @@
     <div class="hero-card">
       <div class="hero-copy">
         <div class="eyebrow">结构重排，不是换字体</div>
-        <h2>上传一个 HTML，自动重构成 10 套完全不同的设计语言。</h2>
+        <h2>上传一个 HTML，自动重构成 12 套完全不同的设计语言。</h2>
         <p>我不会只改字重和颜色，而是把同一份内容拆成不同的页面结构：有的像文档站，有的像仪表盘，也能适配交易监控、数据看板、终端、杂志、玻璃面板和极简阅读。每套都可单独下载。</p>
       </div>
       <div class="hero-meta">
@@ -255,8 +255,8 @@
     <div class="upload-zone" id="uploadZone">
       <div class="upload-box">
         <div class="upload-emoji">✦</div>
-        <div class="upload-title">拖进来一个 HTML，直接生成 10 套不同 UI/UX</div>
-        <div class="upload-copy">上传后会并排展示 10 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体；其中也包含更适合交易监控、数据面板的结构模板。</div>
+        <div class="upload-title">拖进来一个 HTML，直接生成 12 套不同 UI/UX</div>
+        <div class="upload-copy">上传后会并排展示 12 个成品预览。每个风格都会重组页面结构，不是单纯换颜色或字体；其中也包含更适合交易监控、数据面板的结构模板。</div>
         <div class="upload-actions">
           <input class="upload-input" id="nativeFileInput" type="file" accept=".html,.htm" />
           <button class="btn" id="pasteHtmlBtn" type="button">粘贴 HTML</button>
@@ -294,6 +294,14 @@
       market: {
         label: '交易监控', desc: 'K 线仪表盘 / 告警 / 快照', swatch: '#2dd4bf',
         render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Market</title><style>${baseReset()}${marketCss()}</style></head><body><div class="market"><header class="mast"><div><span class="pill">Market monitor</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></div><div class="signal"><span>Live</span><span>${src.blockCount} blocks</span><span>${src.headings.length} headings</span></div></header>${renderMarketBlocks(src)}</div></body></html>`
+      },
+      tradingdesk: {
+        label: 'Trading Desk', desc: '盘口 / 仓位 / 多面板监控', swatch: '#f59e0b',
+        render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Trading Desk</title><style>${baseReset()}${tradingDeskCss()}</style></head><body><div class="desk"><header class="mast"><div><span class="pill">Trading desk</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></div><div class="status"><span class="live">CONNECTED</span><span>${src.blockCount} panels</span></div></header>${renderTradingDeskBlocks(src)}</div></body></html>`
+      },
+      alerts: {
+        label: 'Alert Console', desc: '告警流 / 异常快照 / 运维看板', swatch: '#f43f5e',
+        render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Alerts</title><style>${baseReset()}${alertCss()}</style></head><body><div class="alerts"><header class="mast"><div><span class="pill">Alert console</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></div><div class="signal"><span>⚠ live</span><span>${src.blockCount} events</span></div></header>${renderAlertBlocks(src)}</div></body></html>`
       },
       linear: {
         label: 'Linear Console', desc: '高密度控制台 / 产品感', swatch: '#ff8a65',
@@ -336,7 +344,7 @@
         render: src => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHTML(src.title)} · Gallery</title><style>${baseReset()}${galleryCss()}</style></head><body><div class="gallery"><header><span class="pill">Gallery</span><h1>${escapeHTML(src.title)}</h1><p>${escapeHTML(src.summary)}</p></header><section class="masonry">${renderGalleryCards(src.blocks)}</section></div></body></html>`
       }
     };
-    const THEME_ORDER = ['vercel','market','stripe','linear','notion','editorial','glass','brutalist','terminal','minimal'];
+    const THEME_ORDER = ['vercel','market','tradingdesk','alerts','stripe','linear','notion','editorial','glass','brutalist','terminal','minimal'];
     const SWATCHES = Object.fromEntries(Object.entries(THEMES).map(([k, v]) => [k, v.swatch]));
     const el = id => document.getElementById(id);
     const fileInput = el('fileInput');
@@ -423,6 +431,8 @@
     function brutalistCss(){ return `body{margin:0;background:#f8f400;font:17px/1.7 Arial,Helvetica,sans-serif;color:#000}.poster{max-width:1280px;margin:0 auto;padding:18px}.mast{border:6px solid #000;background:#fff;padding:24px 22px;box-shadow:10px 10px 0 #000}.stamp{display:inline-block;padding:6px 10px;border:3px solid #000;font:900 12px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mast h1{font:900 clamp(2.8rem,7vw,6rem)/.92 Arial,sans-serif;letter-spacing:-.06em;text-transform:uppercase;margin:.2em 0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:14px}.poster-card{grid-column:span 4;border:5px solid #000;background:#fff;padding:18px;box-shadow:8px 8px 0 #000}.poster-card:nth-child(4n){grid-column:span 8}.poster-card span{display:inline-block;margin-bottom:8px;background:#000;color:#fff;padding:4px 8px;font:900 12px/1 Arial,sans-serif}h1,h2,h3{text-transform:uppercase;line-height:.95}pre,table,blockquote{background:#fff;border:4px solid #000}pre{padding:16px;overflow:auto}code{background:#000;color:#fff;padding:.15em .35em}img{max-width:100%;border:5px solid #000}@media(max-width:900px){.poster-card,.poster-card:nth-child(4n){grid-column:span 12}}`; }
     function terminalCss(){ return `body{margin:0;background:#050505;font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;color:#a3f7b0}.term{max-width:1180px;margin:0 auto;padding:28px 20px 80px}.bar{display:flex;gap:8px;padding:12px 14px;background:#111;border:1px solid #263238;border-bottom:none;border-radius:18px 18px 0 0}.bar span{width:12px;height:12px;border-radius:50%;background:#2dd4bf}.bar span:nth-child(2){background:#f59e0b}.bar span:nth-child(3){background:#ef4444}.screen{border:1px solid #263238;border-radius:0 0 18px 18px;background:#08110a;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.35)}.prompt{color:#7dff98;margin-bottom:16px}.log{display:grid;gap:12px}.cmd{padding:14px;border:1px solid #1f3b2a;border-radius:14px;background:#061107}.out{margin-top:8px;color:#c8ffd0}.footer{margin-top:16px;padding-top:14px;border-top:1px solid #17321f;color:#7fb38a}pre,table,blockquote{background:#07130a;border:1px solid #1f3b2a;border-radius:12px}pre{padding:14px;overflow:auto}code{background:#12301a;color:#d1fae5;padding:.15em .35em;border-radius:6px}a{color:#7dff98}img{max-width:100%;border-radius:12px}`; }
     function marketCss(){ return `body{margin:0;background:#050814;font:14.5px/1.72 Inter,sans-serif;color:#e2e8f0}.market{max-width:1280px;margin:0 auto;padding:26px 20px 88px}.mast{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:22px;border:1px solid #233042;border-radius:24px;background:linear-gradient(180deg,#0c1422,#070b14);box-shadow:0 22px 60px rgba(0,0,0,.24)}.mast h1{font:900 clamp(2rem,4vw,3.6rem)/1.04 Inter,sans-serif;letter-spacing:-.05em;color:#fff;margin:.2em 0}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#102132;color:#b6f7e4;border:1px solid #1f3b31;font:700 12px/1 Inter,sans-serif}.signal{display:flex;gap:10px;flex-wrap:wrap}.signal span{padding:8px 10px;border-radius:999px;background:#0b1321;border:1px solid #233042;color:#cbd5e1;font-size:12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}.metric{padding:16px;border-radius:18px;border:1px solid #223047;background:linear-gradient(180deg,#101826,#0a111b)}.metric b{display:block;font-size:28px;color:#fff;line-height:1}.metric span{display:block;margin-top:8px;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.feed{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}.tick{grid-column:span 4;padding:16px;border-radius:18px;border:1px solid #223047;background:#0d1420;box-shadow:0 12px 34px rgba(0,0,0,.18)}.tick:nth-child(4n){grid-column:span 8}.tick>*+*{margin-top:10px}h1,h2,h3{line-height:1.1;color:#fff}pre,table,blockquote{background:#08111c;border:1px solid #223047;border-radius:16px}pre{padding:16px;overflow:auto}code{background:#102132;color:#86efac;padding:.15em .35em;border-radius:6px}a{color:#86efac}img{max-width:100%;border-radius:14px}@media(max-width:900px){.mast{flex-direction:column;align-items:flex-start}.metrics,.feed{grid-template-columns:1fr}.tick,.tick:nth-child(4n){grid-column:span 1}}`; }
+    function tradingDeskCss(){ return `body{margin:0;background:linear-gradient(180deg,#070a12 0,#090d16 100%);font:14.5px/1.72 Inter,sans-serif;color:#dbeafe}.desk{max-width:1360px;margin:0 auto;padding:24px 20px 88px}.mast{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:22px;border:1px solid #2a3444;border-radius:24px;background:linear-gradient(180deg,#111827,#0b0f16);box-shadow:0 24px 60px rgba(0,0,0,.25)}.mast h1{font:900 clamp(2rem,4vw,3.5rem)/1.03 Inter,sans-serif;letter-spacing:-.05em;color:#fff;margin:.2em 0}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#1f2937;color:#fde68a;border:1px solid #334155;font:700 12px/1 Inter,sans-serif}.status{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.live{padding:8px 10px;border-radius:999px;background:#052e16;color:#86efac;border:1px solid #14532d;font:800 12px/1 Inter,sans-serif;letter-spacing:.08em}.status span:last-child{padding:8px 10px;border-radius:999px;background:#111827;border:1px solid #334155;color:#cbd5e1;font-size:12px}.deskgrid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:14px;margin-top:14px}.side{padding:18px;border:1px solid #273244;border-radius:20px;background:#0e1522;display:grid;gap:12px;align-content:start}.kpi{padding:14px;border-radius:16px;background:linear-gradient(180deg,#111827,#0b0f16);border:1px solid #273244}.kpi b{display:block;font-size:28px;color:#fff;line-height:1}.kpi span{display:block;margin-top:8px;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.legend{display:flex;align-items:center;gap:8px;color:#cbd5e1;font-size:12px}.dot{width:10px;height:10px;border-radius:50%}.dot.up{background:#22c55e}.dot.down{background:#f97316}.canvas{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;align-content:start}.deskcard{grid-column:span 6;padding:16px;border-radius:18px;border:1px solid #273244;background:#0d1420;box-shadow:0 12px 34px rgba(0,0,0,.18)}.deskcard.wide{grid-column:span 12}.deskcard>*+*{margin-top:10px}h1,h2,h3{line-height:1.1;color:#fff}pre,table,blockquote{background:#08111c;border:1px solid #273244;border-radius:16px}pre{padding:16px;overflow:auto}code{background:#102132;color:#86efac;padding:.15em .35em;border-radius:6px}a{color:#86efac}img{max-width:100%;border-radius:14px}@media(max-width:960px){.deskgrid{grid-template-columns:1fr}.canvas{grid-template-columns:1fr}.deskcard,.deskcard.wide{grid-column:span 1}}`; }
+    function alertCss(){ return `body{margin:0;background:#07070b;font:14.5px/1.72 Inter,sans-serif;color:#e2e8f0}.alerts{max-width:1280px;margin:0 auto;padding:26px 20px 88px}.mast{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:22px;border:1px solid #3f1d2d;border-radius:24px;background:linear-gradient(180deg,#190814,#09070a);box-shadow:0 22px 60px rgba(0,0,0,.3)}.mast h1{font:900 clamp(2rem,4vw,3.5rem)/1.03 Inter,sans-serif;letter-spacing:-.05em;color:#fff;margin:.2em 0}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#3f111e;color:#fda4af;border:1px solid #5b2032;font:700 12px/1 Inter,sans-serif}.signal{display:flex;gap:10px;flex-wrap:wrap}.signal span{padding:8px 10px;border-radius:999px;background:#1f1115;border:1px solid #3f1d2d;color:#fecdd3;font-size:12px}.stream{display:grid;gap:12px;margin-top:14px}.event{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;padding:16px;border-radius:18px;border:1px solid #3f1d2d;background:#0f0b0d;box-shadow:0 12px 34px rgba(0,0,0,.18)}.event.hot{border-color:#9f1239;background:#180c10}.time{display:inline-flex;align-items:center;justify-content:center;height:30px;border-radius:999px;background:#1f1115;border:1px solid #3f1d2d;color:#fda4af;font:800 12px/1 Inter,sans-serif;letter-spacing:.06em}.body>*+*{margin-top:10px}.body .label{display:inline-block;padding:6px 10px;border-radius:999px;background:#2a0f18;color:#fda4af;font:700 12px/1 Inter,sans-serif}.body pre,.body table,.body blockquote{background:#120b0f;border:1px solid #3f1d2d;border-radius:16px}.body pre{padding:16px;overflow:auto}.body code{background:#2a0f18;color:#fecdd3;padding:.15em .35em;border-radius:6px}.body a{color:#fda4af}.body img{max-width:100%;border-radius:14px}@media(max-width:900px){.event{grid-template-columns:1fr}.time{width:max-content}}`; }
     function minimalCss(){ return `body{margin:0;background:#fff;font:17px/1.9 Inter,sans-serif;color:#111}.wrap{max-width:860px;margin:0 auto;padding:48px 20px 88px}.head{padding-bottom:18px;border-bottom:1px solid #eee}.head h1{font:800 clamp(2.2rem,5vw,3.8rem)/1.05 Inter,sans-serif;letter-spacing:-.05em;margin:.2em 0}.tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#111;color:#fff;font:700 12px/1 Inter,sans-serif}.article{padding-top:26px}.article>*+*{margin-top:18px}h1,h2,h3{line-height:1.08}p,li{color:#222}pre,table,blockquote{border:1px solid #eee;border-radius:16px;background:#fafafa}pre{padding:16px;overflow:auto}code{background:#f3f4f6;padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}`; }
     function notebookCss(){ return `body{margin:0;background:linear-gradient(180deg,#fdf3b5 0,#fde68a 100%);font:15px/1.7 Inter,sans-serif;color:#1f2937}.pad{max-width:1280px;margin:0 auto;padding:24px;display:grid;grid-template-columns:280px 1fr;gap:16px}.rail,.board{background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.08);border-radius:22px;box-shadow:0 14px 40px rgba(0,0,0,.08)}.rail{padding:18px;position:sticky;top:24px;height:calc(100vh - 48px);overflow:auto}.rail .title{font:900 28px/1.05 Inter,sans-serif;letter-spacing:-.04em;margin-bottom:10px}.board{padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;align-content:start}.sticky{padding:14px 14px 16px;border:2px solid rgba(0,0,0,.12);border-radius:18px;transform:rotate(var(--r,0deg));box-shadow:4px 8px 0 rgba(0,0,0,.12)}.sticky header{font:800 12px/1 Inter,sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}.s0{background:#fff1f2}.s1{background:#eff6ff}.s2{background:#ecfdf5}.s3{background:#fff7ed}.s4{background:#f5f3ff}.s5{background:#fef3c7}.sticky:nth-child(2n){--r:-1.3deg}.sticky:nth-child(3n){--r:1.1deg}.sticky:nth-child(4n){--r:-.8deg}pre,table,blockquote{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);border-radius:14px}pre{padding:14px;overflow:auto}code{background:rgba(255,255,255,.8);padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}@media(max-width:960px){.pad{grid-template-columns:1fr}.rail{position:static;height:auto}}`; }
     function galleryCss(){ return `body{margin:0;background:#f8fafc;font:15.5px/1.8 Inter,sans-serif;color:#0f172a}.gallery{max-width:1280px;margin:0 auto;padding:28px 20px 88px}.gallery header{padding:14px 0 22px;border-bottom:1px solid #e2e8f0}.gallery h1{font:900 clamp(2.2rem,5vw,4rem)/1.02 Inter,sans-serif;letter-spacing:-.05em;margin:.2em 0}.masonry{columns:3 280px;column-gap:14px;margin-top:16px}.gcard{break-inside:avoid;padding:16px;border-radius:18px;border:1px solid #dbe4f0;background:#fff;box-shadow:0 12px 34px rgba(15,23,42,.08);margin:0 0 14px}.badge{display:inline-block;margin-bottom:10px;padding:6px 8px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font:700 12px/1 Inter,sans-serif}.gcard>*+*{margin-top:10px}pre,table,blockquote{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px}pre{padding:14px;overflow:auto}code{background:#eff6ff;color:#1d4ed8;padding:.15em .35em;border-radius:6px}img{max-width:100%;border-radius:14px}`; }
@@ -436,6 +446,13 @@
         ['Words', src.wordCount],
       ];
       return `<section class="metrics">${metrics.map(([label, value])=>`<article class="metric"><b>${value}</b><span>${label}</span></article>`).join('')}</section><section class="feed">${src.blocks.map((b,i)=>`<article class="tick"><div class="tag">Tick ${String(i+1).padStart(2,'0')}</div>${b.html}</article>`).join('')}</section>`;
+    }
+    function renderTradingDeskBlocks(src) {
+      const panels = src.blocks.slice(0, 8).map((b,i)=>`<article class="deskcard ${i%3===0?'wide':''}"><div class="label">Panel ${String(i+1).padStart(2,'0')}</div>${b.html}</article>`).join('');
+      return `<section class="deskgrid"><aside class="side"><div class="kpi"><b>${src.wordCount}</b><span>words</span></div><div class="kpi"><b>${src.blockCount}</b><span>panels</span></div><div class="kpi"><b>${src.headings.length}</b><span>headings</span></div><div class="legend"><span class="dot up"></span>Long</div><div class="legend"><span class="dot down"></span>Short</div></aside><main class="canvas">${panels}</main></section>`;
+    }
+    function renderAlertBlocks(src) {
+      return `<section class="stream">${src.blocks.map((b,i)=>`<article class="event ${i%4===0?'hot':''}"><span class="time">${String(i+1).padStart(2,'0')}:00</span><div class="body"><div class="label">Event ${String(i+1).padStart(2,'0')}</div>${b.html}</div></article>`).join('')}</section>`;
     }
     function downloadVariant(themeName) {
       if (!source) return;
@@ -472,7 +489,7 @@
         fileName.textContent = label;
         htmlPaste.value = cleaned;
         renderAll();
-        statusText.textContent = '已载入内容，10 套结构预览已生成';
+        statusText.textContent = '已载入内容，12 套结构预览已生成';
         uploadNotice.textContent = '加载成功：可以继续拖拽新文件，或者直接在下面修改 HTML 再重新载入。';
         toastMsg('HTML 已载入');
       } catch (err) {
